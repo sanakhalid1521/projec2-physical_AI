@@ -159,10 +159,19 @@ For development, both the frontend and backend need to be running simultaneously
 
 For production deployment:
 
+### Frontend (Vercel)
 1. Build the Docusaurus frontend: `npm run build`
-2. Deploy the static files to your preferred hosting service
-3. Deploy the FastAPI backend to a cloud provider
-4. Update the frontend to point to your deployed backend URL
+2. Deploy the static files to Vercel
+3. The frontend will be served from Vercel
+
+### Backend (Hugging Face)
+Your backend is already deployed on Hugging Face at: https://sanakhalid123-rag.hf.space
+
+### Connecting Frontend to Backend
+When deploying the frontend, update the backend API URL in the frontend configuration to point to your deployed backend:
+
+- Development: `http://localhost:8000`
+- Production (Hugging Face): `https://sanakhalid123-rag.hf.space`
 
 ## Contributing
 
