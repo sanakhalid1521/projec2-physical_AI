@@ -1,47 +1,38 @@
 ---
-sidebar_position: 1
+sidebar_label: 'Introduction'
+title: 'Introduction to Physical AI & Humanoid Robotics'
 ---
 
-# Tutorial Intro
+# Introduction to Physical AI & Humanoid Robotics Textbook
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Welcome to the comprehensive textbook on Physical AI and Humanoid Robotics! This interactive textbook is designed to provide you with both theoretical knowledge and hands-on experience in the fascinating field of physical artificial intelligence.
+
+## About This Textbook
+
+This textbook covers the fundamental concepts of Physical AI - the intersection of artificial intelligence and physical systems. You'll learn how to create intelligent agents that can interact with the physical world through sensors and actuators, with a particular focus on humanoid robotics.
+
+## What You'll Learn
+
+Throughout this textbook, you will explore:
+
+- **Chapter 1**: Introduction to Physical AI
+- **Chapter 2**: Humanoid Robotics Fundamentals
+- **Chapter 3**: Sensor Integration & Perception
+- **Chapter 4**: Control Systems & Actuation
+- **Chapter 5**: AI Decision Making & Learning
+
+## How to Use This Textbook
+
+Each chapter contains:
+- Theoretical concepts explained in accessible language
+- Practical examples and code snippets
+- Hands-on activities to reinforce learning
+- Exercises to test your understanding
+
+We recommend starting with Chapter 1 and progressing sequentially, as concepts build upon each other. However, you can also navigate to specific topics using the sidebar.
 
 ## Getting Started
 
-Get started by **creating a new site**.
+[Start with Chapter 1: Introduction to Physical AI](./chapter-1/intro.md)
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
-
-### What you'll need
-
-- [Node.js](https://nodejs.org/en/download/) version 20.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+If you're new to this field, we recommend creating an account to track your progress and personalize your learning experience.

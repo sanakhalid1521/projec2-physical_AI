@@ -1,0 +1,300 @@
+openapi: 3.0.0
+info:
+  title: Content API for Physical AI Textbook
+  version: 1.0.0
+  description: API for textbook content, personalization, and progress tracking
+
+paths:
+  /api/content/chapters:
+    get:
+      summary: Get all chapters
+      description: Retrieve all textbook chapters with basic information
+      parameters:
+        - name: language
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [en, ur]
+          description: Language code for content (defaults to 'en')
+      responses:
+        '200':
+          description: List of chapters retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Chapter'
+
+  /api/content/chapters/{chapterId}:
+    get:
+      summary: Get chapter by ID
+      description: Retrieve a specific chapter with its lessons
+      parameters:
+        - name: chapterId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: language
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [en, ur]
+          description: Language code for content (defaults to 'en')
+        - name: userId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: User ID to personalize content (optional)
+      responses:
+        '200':
+          description: Chapter retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChapterWithLessons'
+
+  /api/content/lessons/{lessonId}:
+    get:
+      summary: Get lesson by ID
+      description: Retrieve a specific lesson with personalized content
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: language
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [en, ur]
+          description: Language code for content (defaults to 'en')
+        - name: userId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: User ID to personalize content (optional)
+      responses:
+        '200':
+          description: Lesson retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+
+  /api/content/lessons/{lessonId}/progress:
+    post:
+      summary: Update lesson progress
+      description: Update the user's progress for a specific lesson
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: string
+                  enum: [not-started, in-progress, completed]
+                completionPercentage:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+                timeSpent:
+                  type: number
+                  description: Time spent in seconds
+                notes:
+                  type: string
+                  description: User's notes on the lesson
+      responses:
+        '200':
+          description: Progress updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProgress'
+        '401':
+          description: Unauthorized
+
+  /api/content/personalize:
+    get:
+      summary: Get personalized content
+      description: Retrieve content adapted to user's background and preferences
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: ID of the content to personalize
+        - name: contentType
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [lesson, chapter]
+          description: Type of content to personalize
+        - name: language
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [en, ur]
+          description: Language code for content (defaults to 'en')
+      responses:
+        '200':
+          description: Personalized content retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalizedContent'
+
+components:
+  schemas:
+    Chapter:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        order:
+          type: number
+        lessonCount:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ChapterWithLessons:
+      allOf:
+        - $ref: '#/components/schemas/Chapter'
+        - type: object
+          properties:
+            lessons:
+              type: array
+              items:
+                $ref: '#/components/schemas/Lesson'
+
+    Lesson:
+      type: object
+      properties:
+        id:
+          type: string
+        chapterId:
+          type: string
+        title:
+          type: string
+        slug:
+          type: string
+        content:
+          type: string
+          description: Lesson content in MDX format
+        handsOnActivity:
+          type: string
+          description: Hands-on activity content
+        difficultyLevel:
+          type: string
+          enum: [basic, intermediate, advanced]
+        estimatedTime:
+          type: number
+          description: Estimated completion time in minutes
+        prerequisites:
+          type: array
+          items:
+            type: string
+          description: List of prerequisite lesson IDs
+        language:
+          type: string
+          enum: [en, ur]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    UserProgress:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        contentId:
+          type: string
+        contentType:
+          type: string
+          enum: [lesson, chapter]
+        status:
+          type: string
+          enum: [not-started, in-progress, completed]
+        completionPercentage:
+          type: number
+          minimum: 0
+          maximum: 100
+        timeSpent:
+          type: number
+          description: Time spent in seconds
+        lastAccessed:
+          type: string
+          format: date-time
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        notes:
+          type: string
+          description: User's notes on the content
+
+    PersonalizedContent:
+      type: object
+      properties:
+        originalContent:
+          $ref: '#/components/schemas/Lesson'
+        personalizedContent:
+          type: string
+          description: Content adapted based on user profile
+        adaptationNotes:
+          type: array
+          items:
+            type: string
+          description: Notes on how content was adapted
+        difficultyAdjustment:
+          type: string
+          enum: [simplified, standard, enhanced]
+          description: How difficulty was adjusted for the user
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

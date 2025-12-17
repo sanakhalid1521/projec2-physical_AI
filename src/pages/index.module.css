@@ -20,4 +20,37 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.userActions {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.userGreeting {
+  font-weight: bold;
+  color: var(--ifm-color-primary-lightest);
+}
+
+.userPreferences {
+  color: var(--ifm-color-secondary-darkest);
+  font-style: italic;
+}
+
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.featureSvg {
+  height: 200px;
+  width: 200px;
 }

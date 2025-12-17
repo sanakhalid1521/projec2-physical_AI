@@ -1,0 +1,86 @@
+.chapterCardsSection {
+  padding: 2rem 0;
+  background-color: #e6f7ff; /* Light blue background */
+}
+
+.sectionTitle {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--ifm-color-primary);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.sectionSubtitle {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: var(--ifm-color-emphasis-600);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.chapterCard {
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.card {
+  height: 100%;
+  border: 1px solid #b3e0ff; /* Light blue border */
+  border-radius: 8px;
+  transition: all var(--ifm-transition-fast) ease;
+  background: #f0f9ff; /* Light blue background for cards */
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px var(--ifm-color-emphasis-200);
+  border-color: var(--ifm-color-primary);
+}
+
+.cardTitle {
+  color: var(--ifm-color-primary);
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.cardDescription {
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 0;
+  flex-grow: 1;
+}
+
+.cardButton {
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-secondary) 100%);
+  border: none;
+  color: white;
+}
+
+.cardButton:hover {
+  background: linear-gradient(135deg, var(--ifm-color-primary-dark) 0%, var(--ifm-color-secondary) 100%);
+  color: white;
+}
+
+/* RTL support for Urdu */
+[data-theme='light'][dir='rtl'] .cardTitle,
+[data-theme='dark'][dir='rtl'] .cardTitle {
+  font-size: 1.1rem;
+  line-height: 1.4;
+  text-align: right;
+}
+
+[data-theme='light'][dir='rtl'] .cardDescription,
+[data-theme='dark'][dir='rtl'] .cardDescription {
+  text-align: right;
+}
+
+[data-theme='light'][dir='rtl'] .cardButton,
+[data-theme='dark'][dir='rtl'] .cardButton {
+  text-align: center;
+}

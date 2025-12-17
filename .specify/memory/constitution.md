@@ -1,55 +1,79 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+SYNC IMPACT REPORT
+Version change: 1.0.0 → 1.2.0
+Modified principles:
+- Added "Bilingual Support" principle (5th principle)
+- Added "User-aware Learning" principle (new 6th principle)
+- Updated "Technology and Platform Constraints" to include Better-Auth requirement
+- Updated "Content Development Process" to include authentication and personalization
+
+Added sections: None
+Removed sections: None
+Templates requiring updates:
+- ✅ plan-template.md: Need to ensure bilingual and authentication requirements are considered
+- ✅ spec-template.md: Need to ensure bilingual and authentication requirements are captured
+- ✅ tasks-template.md: Need to ensure tasks account for Urdu translation and user features
+- ⚠ README.md: May need updates to reflect authentication and personalization (pending review)
+
+Follow-up TODOs: None
+-->
+# Physical AI & Humanoid Robotics Learning Platform Constitution
+
+## VISION
+- Hands-on first
+- Learn by building
+- Progressive difficulty
+- Simple language
+- Bilingual (English ↔ Urdu)
+- User-aware learning
+
+## SUCCESS CRITERIA
+- Every lesson has hands-on activity
+- Users can sign up and log in
+- Content adapts to user background
+- One-click Urdu translation
+- Clean Docusaurus UX
+
+## CONSTRAINTS
+- Platform: Docusaurus
+- Auth via Better-Auth only
+- English primary, Urdu optional
+- No heavy math
+
+## BRAND VOICE
+- Friendly mentor
+- Clear, calm, inclusive
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Hands-on First Learning
+Every lesson must start with a hands-on activity that demonstrates the concept; learners build first, then understand theory through practice; practical examples take precedence over abstract explanations
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Progressive Difficulty
+Content must follow a clear progression from beginner to intermediate level; each lesson builds on previous concepts with increasing complexity; prerequisite knowledge clearly stated for each module
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### Simple Language
+Technical concepts explained using clear, accessible language; avoid heavy mathematics and complex jargon; prioritize intuitive understanding over theoretical rigor
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Bilingual Support
+Content must be available in both English (primary) and Urdu (optional) languages; one-click translation per lesson; ensure accessibility for diverse learners
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### User-aware Learning
+Content must adapt to user background and progress; users can sign up and log in to personalize their learning experience; learning paths customized based on user interactions
 
-### [PRINCIPLE_6_NAME]
+### Docusaurus Platform Standard
+All content delivered through Docusaurus platform; consistent styling, navigation, and user experience; leverage Docusaurus features for optimal learning experience
 
+### Modular Content
+Content organized in independent, self-contained modules; each lesson has clear objectives and hands-on activities; modular design allows for extensibility and customization
 
-[PRINCIPLE__DESCRIPTION]
+## Technology and Platform Constraints
+Platform restricted to Docusaurus only; authentication via Better-Auth only; no heavy mathematical content; content designed for beginner to intermediate learners; bilingual support (English primary, Urdu optional); modular, extensible architecture required
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Content Development Process
+Every lesson must have clear objectives and hands-on activities; content reviewed for accessibility and practical application; iterative development based on learner feedback; both English and Urdu versions maintained simultaneously; user authentication and personalization features implemented
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+Constitution governs all project decisions; amendments require explicit approval; all content must align with hands-on learning approach; regular review for consistency with core principles
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.3.0 | **Ratified**: 2025-12-15 | **Last Amended**: 2025-12-15

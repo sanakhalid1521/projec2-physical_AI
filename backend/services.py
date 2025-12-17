@@ -1,0 +1,270 @@
+from typing import List, Optional
+import cohere
+from qdrant_client import QdrantClient
+from qdrant_client.http import models
+from pydantic import BaseModel
+import os
+import uuid
+from datetime import datetime
+from dotenv import load_dotenv
+from database import DatabaseManager
+
+load_dotenv()
+
+class Document(BaseModel):
+    id: str
+    content: str
+    metadata: dict
+    created_at: str
+
+class RAGService:
+    def __init__(self):
+        # Initialize Cohere client
+        cohere_api_key = os.getenv("COHERE_API_KEY")
+        if cohere_api_key:
+            self.cohere_client = cohere.Client(cohere_api_key)
+        else:
+            print("WARNING: COHERE_API_KEY not set. Some features will be disabled.")
+            self.cohere_client = None
+
+        # Initialize Qdrant client
+        qdrant_url = os.getenv("QDRANT_URL")
+        qdrant_api_key = os.getenv("QDRANT_API_KEY")
+
+        # Only try to connect to cloud if we have both URL and API key and the URL is not a placeholder
+        if qdrant_url and qdrant_api_key and "your_" not in qdrant_url and "example" not in qdrant_url:
+            try:
+                self.qdrant_client = QdrantClient(
+                    url=qdrant_url,
+                    api_key=qdrant_api_key,
+                    prefer_grpc=True
+                )
+                print("Connected to Qdrant Cloud successfully")
+            except Exception as e:
+                print(f"Failed to connect to Qdrant Cloud: {e}")
+                print("Using in-memory storage for testing")
+                self.qdrant_client = QdrantClient(":memory:")
+        else:
+            print("QDRANT_URL or QDRANT_API_KEY not set or using placeholder values. Using in-memory storage for testing")
+            self.qdrant_client = QdrantClient(":memory:")
+
+        # Initialize database manager
+        self.db_manager = DatabaseManager()
+
+        # Ensure the collection exists
+        self._ensure_collection_exists()
+
+    def _ensure_collection_exists(self):
+        """Ensure the Qdrant collection exists"""
+        try:
+            self.qdrant_client.get_collection("physical_ai_docs")
+        except:
+            self.qdrant_client.create_collection(
+                collection_name="physical_ai_docs",
+                vectors_config=models.VectorParams(size=1024, distance=models.Distance.COSINE),
+            )
+
+    async def connect_to_neon_db(self):
+        """Establish connection to Neon Postgres database"""
+        await self.db_manager.connect()
+
+    async def embed_text(self, text: str, input_type: str = "search_document") -> List[float]:
+        """Generate embeddings for text using Cohere"""
+        if not self.cohere_client:
+            raise Exception("Cohere client not initialized. Please set COHERE_API_KEY.")
+
+        try:
+            response = self.cohere_client.embed(
+                texts=[text],
+                model="embed-english-v3.0",
+                input_type=input_type
+            )
+            return response.embeddings[0]
+        except Exception as e:
+            print(f"Error generating embeddings: {e}")
+            raise
+
+    async def store_document(self, content: str, metadata: dict = None) -> str:
+        """Store a document in Qdrant with embeddings"""
+        if metadata is None:
+            metadata = {}
+
+        doc_id = str(uuid.uuid4())
+        vector = await self.embed_text(content)
+
+        self.qdrant_client.upsert(
+            collection_name="physical_ai_docs",
+            points=[
+                models.PointStruct(
+                    id=doc_id,
+                    vector=vector,
+                    payload={
+                        "content": content,
+                        "metadata": metadata,
+                        "created_at": datetime.now().isoformat()
+                    }
+                )
+            ]
+        )
+
+        # Store in Neon Postgres as well if available
+        if self.db_manager.has_pool:
+            # Convert metadata to JSON string for database storage
+            import json
+            json_metadata = json.dumps(metadata) if isinstance(metadata, dict) else metadata
+            await self.db_manager.store_document(doc_id, content, json_metadata)
+
+        return doc_id
+
+    async def search_documents(self, query: str, limit: int = 5) -> List[dict]:
+        """Search for relevant documents in Qdrant"""
+        query_vector = await self.embed_text(query, input_type="search_query")
+
+        search_results = self.qdrant_client.search(
+            collection_name="physical_ai_docs",
+            query_vector=query_vector,
+            limit=limit,
+            with_payload=True
+        )
+
+        results = []
+        for result in search_results:
+            if result.payload:
+                results.append({
+                    "id": result.id,
+                    "content": result.payload.get("content", ""),
+                    "metadata": result.payload.get("metadata", {}),
+                    "score": result.score
+                })
+
+        return results
+
+    async def generate_response(self, query: str, context: str = "") -> str:
+        """Generate a response using Cohere based on query and context"""
+        if not self.cohere_client:
+            return "Sorry, the AI service is not configured. Please set the COHERE_API_KEY environment variable."
+
+        try:
+            # Prepare the message content
+            full_context = f"Context: {context}\n\n" if context else ""
+            message = f"""
+            {full_context}
+            Question: {query}
+
+            Please provide a comprehensive answer based on the Physical AI & Robotics textbook content.
+            If you don't have enough information, say so clearly.
+            """
+
+            # Try different models in order of preference
+            # Based on testing, command-r-08-2024 works with the current API key
+            models_to_try = ["command-r-08-2024", "command-r-plus-08-2024", "command-r-plus", "command-r", "command", "command-light"]
+            response = None
+
+            for model in models_to_try:
+                try:
+                    # Generate response using Cohere Chat API
+                    response = self.cohere_client.chat(
+                        model=model,
+                        message=message,
+                        max_tokens=500,
+                        temperature=0.7
+                    )
+                    print(f"Successfully used model: {model}")
+                    break
+                except Exception as model_error:
+                    print(f"Model {model} not available: {model_error}")
+                    continue
+
+            if response is not None:
+                return response.text.strip()
+            else:
+                # If no models are available, return a helpful message
+                return """AI service is not currently available due to model access restrictions.
+                This may be because:
+                1. Your Cohere API key doesn't have access to the required models
+                2. The models have been deprecated or renamed
+                3. Your account tier doesn't support these models
+
+                Please check your API key and model access, or contact support for assistance."""
+
+        except Exception as e:
+            print(f"Error generating response: {e}")
+            return "Sorry, I encountered an error while processing your request."
+
+    async def generate_paper(self, topic: str, length: int = 3000) -> str:
+        """Generate a research paper on a given topic"""
+        if not self.cohere_client:
+            return "Sorry, the AI service is not configured. Please set the COHERE_API_KEY environment variable."
+
+        try:
+            message = f"""
+            Write a comprehensive research paper about {topic}.
+            The paper should be approximately {length} words long.
+            Include the following sections:
+            1. Introduction
+            2. Literature Review
+            3. Methodology (if applicable)
+            4. Discussion
+            5. Conclusion
+            6. References
+
+            Make sure the paper is well-structured, academic in tone, and includes relevant information about Physical AI and Robotics.
+            """
+
+            # Try different models in order of preference
+            # Based on testing, command-r-08-2024 works with the current API key
+            models_to_try = ["command-r-08-2024", "command-r-plus-08-2024", "command-r-plus", "command-r", "command", "command-light"]
+            response = None
+
+            for model in models_to_try:
+                try:
+                    response = self.cohere_client.chat(
+                        model=model,
+                        message=message,
+                        max_tokens=length,
+                        temperature=0.7
+                    )
+                    print(f"Successfully used model for paper: {model}")
+                    break
+                except Exception as model_error:
+                    print(f"Model {model} not available for paper generation: {model_error}")
+                    continue
+
+            if response is not None:
+                paper_content = response.text.strip()
+
+                # Store the generated paper in the database
+                await self.store_document(
+                    content=paper_content,
+                    metadata={
+                        "type": "generated_paper",
+                        "topic": topic,
+                        "length": length
+                    }
+                )
+
+                return paper_content
+            else:
+                # If no models are available, return a helpful message
+                return """AI service is not currently available for paper generation due to model access restrictions.
+                This may be because:
+                1. Your Cohere API key doesn't have access to the required models
+                2. The models have been deprecated or renamed
+                3. Your account tier doesn't support these models
+
+                Please check your API key and model access, or contact support for assistance."""
+
+        except Exception as e:
+            print(f"Error generating paper: {e}")
+            return "Sorry, I encountered an error while generating the paper."
+
+    async def load_documents_from_db(self):
+        """Load documents from Neon Postgres if available"""
+        if not self.db_manager.has_pool:
+            return []
+
+        try:
+            return await self.db_manager.search_documents("", limit=100)  # Get all documents
+        except Exception as e:
+            print(f"Error loading documents from database: {e}")
+            return []

@@ -1,0 +1,46 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.Chapter 1: Introduction to Physical AI": {
+    "message": "Chapter 1: Introduction to Physical AI",
+    "description": "The label for category 'Chapter 1: Introduction to Physical AI' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Chapter 2: Humanoid Robotics Fundamentals": {
+    "message": "Chapter 2: Humanoid Robotics Fundamentals",
+    "description": "The label for category 'Chapter 2: Humanoid Robotics Fundamentals' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Chapter 3: Sensor Integration & Perception": {
+    "message": "Chapter 3: Sensor Integration & Perception",
+    "description": "The label for category 'Chapter 3: Sensor Integration & Perception' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Chapter 4: Control Systems & Actuation": {
+    "message": "Chapter 4: Control Systems & Actuation",
+    "description": "The label for category 'Chapter 4: Control Systems & Actuation' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Chapter 5: AI Decision Making & Learning": {
+    "message": "Chapter 5: AI Decision Making & Learning",
+    "description": "The label for category 'Chapter 5: AI Decision Making & Learning' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.urSidebar.category.چیپٹر 1: فزیکل اے آئی کا تعارف": {
+    "message": "چیپٹر 1: فزیکل اے آئی کا تعارف",
+    "description": "The label for category 'چیپٹر 1: فزیکل اے آئی کا تعارف' in sidebar 'urSidebar'"
+  },
+  "sidebar.urSidebar.category.چیپٹر 2: ہیومنوائڈ روبوٹکس کے بنیادیات": {
+    "message": "چیپٹر 2: ہیومنوائڈ روبوٹکس کے بنیادیات",
+    "description": "The label for category 'چیپٹر 2: ہیومنوائڈ روبوٹکس کے بنیادیات' in sidebar 'urSidebar'"
+  },
+  "sidebar.urSidebar.category.چیپٹر 3: سینسر انٹیگریشن اور ادراک": {
+    "message": "چیپٹر 3: سینسر انٹیگریشن اور ادراک",
+    "description": "The label for category 'چیپٹر 3: سینسر انٹیگریشن اور ادراک' in sidebar 'urSidebar'"
+  },
+  "sidebar.urSidebar.category.چیپٹر 4: کنٹرول سسٹم اور ایکٹو ایشن": {
+    "message": "چیپٹر 4: کنٹرول سسٹم اور ایکٹو ایشن",
+    "description": "The label for category 'چیپٹر 4: کنٹرول سسٹم اور ایکٹو ایشن' in sidebar 'urSidebar'"
+  },
+  "sidebar.urSidebar.category.چیپٹر 5: اے آئی فیصلہ سازی اور سیکھنا": {
+    "message": "چیپٹر 5: اے آئی فیصلہ سازی اور سیکھنا",
+    "description": "The label for category 'چیپٹر 5: اے آئی فیصلہ سازی اور سیکھنا' in sidebar 'urSidebar'"
+  }
+}
