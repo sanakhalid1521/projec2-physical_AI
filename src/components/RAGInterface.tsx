@@ -25,7 +25,9 @@ const RAGInterface = () => {
 
     try {
       // Call the backend API
-      const response = await fetch('https://sanakhalid123-rag.hf.space/api/rag/query', {
+      // Update this URL to match your deployed backend URL
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://your-backend-url.hf.space';
+      const response = await fetch(`${BACKEND_URL}/api/rag/query`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +71,9 @@ const RAGInterface = () => {
 
     try {
       // Call the paper generation API
-      const response = await fetch('https://sanakhalid123-rag.hf.space/api/rag/generate-paper', {
+      // Update this URL to match your deployed backend URL
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://your-backend-url.hf.space';
+      const response = await fetch(`${BACKEND_URL}/api/rag/generate-paper`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
